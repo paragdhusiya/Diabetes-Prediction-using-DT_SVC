@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diabetes Prediction</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.3s ease;
+    }
+
+    .container {
+      width: 300px;
+      margin: 100px auto;
+      background-color: #333;
+      padding: 20px;
+      border-radius: 10px;
+      transition: background-color 0.3s ease;
+    }
+
+    .title {
+      color: #fff;
+      text-align: center;
+      margin-bottom: 20px;
+      cursor: pointer;
+      transition: color 0.3s ease; /* Added transition for title color */
+    }
+
+    .form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .input-container {
+      position: relative;
+      margin-bottom: 15px;
+    }
+
+    .input {
+      width: calc(100% - 10px);
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      background-color: #444;
+      color: #fff;
+      transition: all 0.3s ease;
+    }
+
+    .input:focus {
+      outline: none;
+      box-shadow: 0 0 10px #fff;
+      z-index: 1;
+    }
+
+    .btn {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #0056b3;
+    }
+
+    .dark-mode-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 50px;
+      height: 25px;
+      background-color: #888;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      z-index: 999;
+    }
+
+    .dark-mode-toggle.active {
+      background-color: #444;
+    }
+
+    .dark-mode-toggle::before {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 21px;
+      height: 21px;
+      background-color: #fff;
+      border-radius: 50%;
+      transition: transform 0.3s ease;
+    }
+
+    .dark-mode-toggle.active::before {
+      transform: translateX(25px);
+    }
+
+    .result {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 5px;
+      display: none;
+    }
+
+    .result.active {
+      display: block;
+    }
+
+    .dark-mode .container {
+      background-color: #f0f0f0;
+    }
+
+    .dark-mode .title {
+      color: #333;
+    }
+
+    .dark-mode .input {
+      background-color: #ccc;
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+
+<div class="dark-mode-toggle" title="Toggle Theme"></div>
+
+<div class="container">
+  <h1 class="title">Diabetes Prediction</h1>
+  <form action="{{ url_for('predict_datapoint')}}" method="post" class="form">
+    <div class="input-container">
+      <input type="text" name="Pregnancies" placeholder="Pregnancies" required="required" class="input" />
+    </div>
+    <div class="input-container">
+      <input type="text" name="Glucose" placeholder="Glucose" required="required" class="input" />
+    </div>
+    <div class="input-container">
+      <input type="text" name="BloodPressure" placeholder="BloodPressure" required="required" class="input" />
+    </div>
+    <div class="input-container">
+      <input type="text" name="SkinThickness" placeholder="SkinThickness" required="required" class="input" />
+    </div>
+    <div class="input-container">
+      <input type="text" name="Insulin" placeholder="Insulin" required="required" class="input" />
+    </div>
+    <div class="input-container">
+      <input type="text" name="BMI" placeholder="BMI" required="required" class="input" />
+    </div>
+    <div class="input-container">
+      <input type="text" name="DiabetesPedigreeFunction" placeholder="DiabetesPedigreeFunction" required="required" class="input" />
+    </div>
+    <div class="input-container">
+      <input type="text" name="Age" placeholder="Age" required="required" class="input" />
+    </div>
+    <button type="submit" class="btn">Predict</button>
+  </form>
+</div>
+
+<div class="result">{{result}}</div>
+
+<script>
+  const darkModeToggle = document.querySelector('.dark-mode-toggle');
+  const title = document.querySelector('.title');
+  const inputs = document.querySelectorAll('.input');
+  const container = document.querySelector('.container');
+
+  darkModeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+    darkModeToggle.classList.toggle('active');
+    title.classList.toggle('dark-mode');
+    inputs.forEach(input => input.classList.toggle('dark-mode'));
+
+    // Swapping background colors of the container and body
+    const containerBackgroundColor = window.getComputedStyle(container).getPropertyValue('background-color');
+    const bodyBackgroundColor = window.getComputedStyle(document.body).getPropertyValue('background-color');
+
+    container.style.backgroundColor = bodyBackgroundColor;
+    document.body.style.backgroundColor = containerBackgroundColor;
+  });
+</script>
+
+</body>
+</html>
